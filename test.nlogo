@@ -39,6 +39,8 @@ to setup
     set growth-rate growth-rate + (1 / (10 * (abs (pH - 8.15) + abs (water-temp - 21.5))))
   ]
   reset-ticks
+
+  ask turtles [setxy random-xcor random-ycor]
 end
 
 to go
@@ -203,7 +205,7 @@ water-temp
 water-temp
 1
 34
-34.0
+22.0
 1
 1
 degrees C
