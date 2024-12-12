@@ -21,16 +21,24 @@ to setup
   ask patches
   [
     set patch-energy random 50
-    set pcolor scale-color green patch-energy 0 100
+    set pcolor scale-color red patch-energy 0 100
   ]
 
   create-turtles 50
   [
-    set size 5
+    set size 3
     set color green
     set energy random 200
     set biomass random 10
     set growth-rate random-float 1
+
+    ; optimum pH for growth is between pH 6.3 and 10 => mean = 8.15
+    ; https://digitalcommons.uri.edu/cgi/viewcontent.cgi?article=1338&context=gsofacpubs
+    ; ideal water temperature is between 18 and 25 degrees celcius ==> mean = 21.5
+    ; https://www.nature.com/articles/s41598-020-79616-0
+    set growth-rate growth-rate + abs (1 / (pH - 8.15) + (water-temp - 21.5))
+
+
   ]
   reset-ticks
 end
@@ -38,10 +46,11 @@ end
 to go
   set npp 0
   ask turtles [move-and-eat]
+  ;ask turtles [show energy]
+  ask turtles [show growth-rate]
   tick
 
   if ticks >= 1000 [stop]
-
 end
 
 to move-and-eat
@@ -49,6 +58,7 @@ to move-and-eat
   set energy energy - 25
 
   ; Add patch's energy to turtle's energy
+  ;set energy energy + (patch-energy * growth-rate)
   set energy energy + patch-energy
 
   ; random movement for now, may change later to follow each other
@@ -70,13 +80,14 @@ to reproduce
     set energy energy / 2
   ]
   set energy energy / 2
+  set biomass random 10
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-597
-33
-971
-408
+415
+37
+789
+412
 -1
 -1
 6.0
@@ -100,10 +111,10 @@ ticks
 30.0
 
 BUTTON
-57
-80
-120
-113
+19
+15
+82
+48
 NIL
 setup
 NIL
@@ -117,10 +128,10 @@ NIL
 1
 
 BUTTON
-61
-133
-124
-166
+20
+57
+83
+90
 NIL
 go
 T
@@ -134,25 +145,25 @@ NIL
 1
 
 SLIDER
-46
-216
-218
-249
+19
+100
+191
+133
 max-depth
 max-depth
 100
 200
-150.0
+200.0
 10
 1
 m
 HORIZONTAL
 
 PLOT
-47
-275
-247
-425
+15
+284
+215
+434
 Carbon Sequestration Over Time
 Ticks
 Carbon Sequestration
@@ -165,6 +176,36 @@ false
 "" ""
 PENS
 "default" 1.0 0 -2674135 true "" "plot npp"
+
+SLIDER
+21
+155
+193
+188
+pH
+pH
+0
+14
+7.0
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+23
+207
+198
+240
+water-temp
+water-temp
+1
+30
+22.0
+1
+1
+degrees C
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
