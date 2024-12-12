@@ -36,9 +36,7 @@ to setup
     ; https://digitalcommons.uri.edu/cgi/viewcontent.cgi?article=1338&context=gsofacpubs
     ; ideal water temperature is between 18 and 25 degrees celcius ==> mean = 21.5
     ; https://www.nature.com/articles/s41598-020-79616-0
-    set growth-rate growth-rate + abs (1 / (pH - 8.15) + (water-temp - 21.5))
-
-
+    set growth-rate growth-rate + (1 / abs (pH - 8.15) + abs (water-temp - 21.5))
   ]
   reset-ticks
 end
@@ -47,7 +45,7 @@ to go
   set npp 0
   ask turtles [move-and-eat]
   ;ask turtles [show energy]
-  ask turtles [show growth-rate]
+  ;ask turtles [show growth-rate]
   tick
 
   if ticks >= 1000 [stop]
@@ -84,10 +82,10 @@ to reproduce
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-415
-37
-789
-412
+375
+36
+749
+411
 -1
 -1
 6.0
@@ -160,13 +158,13 @@ m
 HORIZONTAL
 
 PLOT
-15
-284
-215
-434
+23
+258
+347
+509
 Carbon Sequestration Over Time
 Ticks
-Carbon Sequestration
+sequestered carbon (g)
 0.0
 1000.0
 0.0
