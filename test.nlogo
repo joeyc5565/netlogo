@@ -36,28 +36,30 @@ to setup
     ; https://digitalcommons.uri.edu/cgi/viewcontent.cgi?article=1338&context=gsofacpubs
     ; ideal water temperature is between 18 and 25 degrees celcius ==> mean = 21.5
     ; https://www.nature.com/articles/s41598-020-79616-0
-    set growth-rate growth-rate + (1 / abs (pH - 8.15) + abs (water-temp - 21.5))
+    set growth-rate growth-rate + (1 / (10 * (abs (pH - 8.15) + abs (water-temp - 21.5))))
   ]
   reset-ticks
 end
 
 to go
-  set npp 0
+  ;set npp 0
   ask turtles [move-and-eat]
-  ;ask turtles [show energy]
   ;ask turtles [show growth-rate]
   tick
 
-  if ticks >= 1000 [stop]
+  if ticks >= 200 [
+    print npp
+    stop
+  ]
 end
 
 to move-and-eat
   ; Subtract 25 from turtle's energy
-  set energy energy - 25
+  set energy energy - 27
 
   ; Add patch's energy to turtle's energy
-  ;set energy energy + (patch-energy * growth-rate)
-  set energy energy + patch-energy
+  set energy energy + ([patch-energy] of patch-here * growth-rate)
+  ;set energy energy + patch-energy
 
   ; random movement for now, may change later to follow each other
   right (random 181) - 90
@@ -80,6 +82,8 @@ to reproduce
   set energy energy / 2
   set biomass random 10
 end
+
+
 @#$#@#$#@
 GRAPHICS-WINDOW
 375
@@ -149,9 +153,9 @@ SLIDER
 133
 max-depth
 max-depth
+0
 100
-200
-200.0
+80.0
 10
 1
 m
@@ -184,7 +188,7 @@ pH
 pH
 0
 14
-7.0
+8.1
 0.1
 1
 NIL
@@ -198,8 +202,8 @@ SLIDER
 water-temp
 water-temp
 1
-30
-22.0
+34
+34.0
 1
 1
 degrees C
