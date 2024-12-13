@@ -3,6 +3,10 @@ globals
   npp
 ]
 
+; each turtle has:
+; - a growth rate that is influenced by the pH and water temperature
+; - a biomass that is used to calculate the turtle's NPP
+; - an energy level that is used to determine if the turtle should reproduce or die
 turtles-own
 [
   energy
@@ -10,6 +14,7 @@ turtles-own
   growth-rate
 ]
 
+; each patch gets randomly assigned an energy level between 0 and 50
 patches-own
 [
   patch-energy
@@ -21,7 +26,7 @@ to setup
   ask patches
   [
     set patch-energy random 50
-    set pcolor scale-color red patch-energy 0 100
+    set pcolor scale-color red patch-energy 0 100     ; color patches based on energy level -> redder = more energy
   ]
 
   create-turtles 50
@@ -40,15 +45,16 @@ to setup
   ]
   reset-ticks
 
-  ask turtles [setxy random-xcor random-ycor]
+  ask turtles [setxy random-xcor random-ycor]   ; randomize turtle starting positions
 end
 
 to go
-  set npp 0
+  set npp 0                         ; comment if you want to see the total NPP, leave uncommented to see NPP over time
   ask turtles [move-and-eat]
-  ;ask turtles [show growth-rate]
+  ;ask turtles [show growth-rate]   ; for debugging
   tick
 
+  ; stop the simulation after 200 ticks (arbitrary number to make running trials quick)
   if ticks >= 200 [
     print npp
     stop
@@ -68,21 +74,23 @@ to move-and-eat
   forward 1
 
   ; Calculate turtle-npp and increment global npp
-  let turtle-npp biomass * growth-rate * max-depth
+  let turtle-npp biomass * growth-rate * max-depth      ; formula from source in presentation
   set npp npp + turtle-npp
 
-  ; Check energy levels
+  ; Check energy levels: if energy is high enough, reproduce, if too low, die
   if energy > 200 [ reproduce ]
   if energy < 0 [ die ]
 end
 
 to reproduce
+  ; create a new turtle with half the energy of the parent
+  ; also cut parent's energy in half so they don't infinitely spawn new turtles
   hatch 1
   [
     set energy energy / 2
   ]
-  set energy energy / 2
-  set biomass random 10
+  set energy energy / 2  
+  set biomass random 10  
 end
 
 
