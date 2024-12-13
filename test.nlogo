@@ -44,7 +44,7 @@ to setup
 end
 
 to go
-  ;set npp 0
+  set npp 0
   ask turtles [move-and-eat]
   ;ask turtles [show growth-rate]
   tick
@@ -88,10 +88,10 @@ end
 
 @#$#@#$#@
 GRAPHICS-WINDOW
-375
-36
-749
-411
+459
+78
+833
+453
 -1
 -1
 6.0
@@ -166,13 +166,13 @@ HORIZONTAL
 PLOT
 23
 258
-347
+442
 509
 Carbon Sequestration Over Time
 Ticks
 sequestered carbon (g)
 0.0
-1000.0
+200.0
 0.0
 20000.0
 true
